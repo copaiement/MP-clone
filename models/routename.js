@@ -31,7 +31,7 @@ const RoutenameSchema = new Schema({
 // Virtual for area's URL
 RoutenameSchema.virtual('url').get(function () {
   // We don't use an arrow function as we'll need the this object
-  return `/catalog/route/${this._id}`;
+  return `/catalog/routename/${this._id}`;
 });
 
 RoutenameSchema.virtual('added_date_formatted').get(function () {

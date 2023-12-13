@@ -7,12 +7,12 @@ const userArgs = process.argv.slice(2);
 
 const Area = require('./models/area');
 const Sector = require('./models/sector');
-const Route = require('./models/route');
+const Routename = require('./models/routename');
 const Comment = require('./models/comment');
 
 const areas = [];
 const sectors = [];
-const routes = [];
+const routenames = [];
 const comments = [];
 
 const mongoose = require('mongoose');
@@ -28,7 +28,7 @@ async function main() {
   console.log('Debug: Should be connected?');
   await createAreas();
   await createSectors();
-  await createRoutes();
+  await createRoutenames();
   await createComments();
   console.log('Debug: Closing mongoose');
   mongoose.connection.close();
@@ -59,8 +59,8 @@ async function sectorCreate(index, sector_name, area, added_by) {
   console.log(`Added sector: ${sector_name}`);
 }
 
-async function routeCreate(index, route_name, route_type, route_grade, area, sector, added_by) {
-  const route = new Route({
+async function routenameCreate(index, route_name, route_type, route_grade, area, sector, added_by) {
+  const route = new Routename({
     route_name: route_name,
     route_type: route_type,
     route_grade: route_grade,
@@ -71,7 +71,7 @@ async function routeCreate(index, route_name, route_type, route_grade, area, sec
   });
 
   await route.save();
-  routes[index] = route;
+  routenames[index] = route;
   console.log(`Added route: ${route_name}`);
 }
 
@@ -106,22 +106,22 @@ async function createSectors() {
   ]);
 }
 
-async function createRoutes() {
+async function createRoutenames() {
   console.log('Adding Routes');
   await Promise.all([
-    routeCreate(0, 'Infections Groove', 'Sport', '5.13b', areas[0], sectors[0], 'ColeP'),
-    routeCreate(1, 'Ghetto Boys', 'Sport', '5.13c', areas[0], sectors[0], 'ColePa'),
-    routeCreate(2, 'T.H.E Cat', 'Sport', '5.13b', areas[0], sectors[1], 'ColeP'),
-    routeCreate(3, 'All You Can Eat', 'Sport', '5.15a', areas[1], sectors[2], 'ColeP'),
-    routeCreate(4, 'T-rex', 'Sport', '5.14a', areas[2], sectors[3], 'CoP'),
+    routenameCreate(0, 'Infections Groove', 'Sport', '5.13b', areas[0], sectors[0], 'ColeP'),
+    routenameCreate(1, 'Ghetto Boys', 'Sport', '5.13c', areas[0], sectors[0], 'ColePa'),
+    routenameCreate(2, 'T.H.E Cat', 'Sport', '5.13b', areas[0], sectors[1], 'ColeP'),
+    routenameCreate(3, 'All You Can Eat', 'Sport', '5.15a', areas[1], sectors[2], 'ColeP'),
+    routenameCreate(4, 'T-rex', 'Sport', '5.14a', areas[2], sectors[3], 'CoP'),
   ]);
 }
 
 async function createComments() {
   console.log('Adding Comments');
   await Promise.all([
-    commentCreate(0, routes[0], 'Great line', 'Cole'),
-    commentCreate(1, routes[1], 'Idk man, here is a comment', 'Colep'),
-    commentCreate(2, routes[2], 'Another route. Another comment', 'ColePai')
+    commentCreate(0, routenames[0], 'Great line', 'Cole'),
+    commentCreate(1, routenames[1], 'Idk man, here is a comment', 'Colep'),
+    commentCreate(2, routenames[2], 'Another route. Another comment', 'ColePai')
   ]);
 }

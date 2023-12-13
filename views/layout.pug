@@ -1,7 +1,33 @@
 doctype html
-html
+html(lang='en')
   head
     title= title
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+    div(class='container-fluid')
+      div(class='row')
+        div(class='col-sm-2')
+          block sidebar
+            ul(class='sidebar-nav')
+              li
+                a(href='/catalog') Home
+              li
+                a(href='/catalog/areas') All Areas
+              li
+                a(href='/catalog/sectors') All Sectors
+              li
+                a(href='/catalog/routenames') All Routes
+              li
+                hr
+              li
+                a(href='/catalog/area/create') Create new area
+              li
+                a(href='/catalog/sector/create') Create new sector
+              li
+                a(href='/catalog/routename/create') Create new route
+
+        div(class='col-sm-10')
+          block content
+
