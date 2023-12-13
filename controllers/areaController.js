@@ -1,6 +1,29 @@
 const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 const Area = require('../models/area');
+const Sector = require('../models/sector');
+const Routename = require('../models/routename');
+
+// Index page
+exports.index = asyncHandler(async (req, res, next) => {
+  // Get details of areas, sectors, and route counts (in parallel)
+  const [
+    numAreas,
+    numSectors,
+    numRoutenames,
+  ] = await Promise.all([
+    Area.countDocuments({}).exec(),
+    Sector.countDocuments({}).exec(),
+    Routename.countDocuments({}).exec(),
+  ]);
+
+  res.render('index', {
+    title: 'Route Database Home',
+    area_count: numAreas,
+    sector_count: numSectors,
+    route_count: numRoutenames,
+  });
+});
 
 // Display list of all Areas.
 exports.area_list = asyncHandler(async (req, res, next) => {
@@ -11,25 +34,25 @@ exports.area_list = asyncHandler(async (req, res, next) => {
   });
 });
 
-// Display detail page for a specific Author.
-exports.author_detail = asyncHandler(async (req, res, next) => {
+// Display detail page for a specific Area.
+exports.area_detail = asyncHandler(async (req, res, next) => {
   // Get details of author and all their books (in parallel)
-  const [author, allBooksByAuthor] = await Promise.all([
-    Author.findById(req.params.id).exec(),
-    Book.find({ author: req.params.id }, 'title summary').exec(),
+  const [area, allSectors] = await Promise.all([
+    Area.findById(req.params.id).exec(),
+    Sector.find({ area: req.params.id }, 'sector_name').exec(),
   ]);
 
-  if (author === null) {
+  if (area === null) {
     // No results.
-    const err = new Error('Author not found');
+    const err = new Error('Area not found');
     err.status = 404;
     return next(err);
   }
 
-  res.render('author_detail', {
-    title: 'Author Detail',
-    author: author,
-    author_books: allBooksByAuthor,
+  res.render('area_detail', {
+    title: 'Area Detail',
+    area: area,
+    sectors: allSectors,
   });
 });
 

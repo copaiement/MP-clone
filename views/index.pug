@@ -2,4 +2,13 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p Welcome to #[em Route Database], a very basic Mountain Project clone.
+
+  h1 Dynamic content
+
+  p The database has the following record counts:
+
+  ul
+    li #[strong Areas:] !{area_count}
+    li #[strong Sectors:] !{sector_count}
+    li #[strong Routes:] !{route_count}

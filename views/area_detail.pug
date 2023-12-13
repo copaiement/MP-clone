@@ -1,0 +1,24 @@
+extends layout
+
+block content
+
+  h1 Area: #{area.name}
+  p #{area.state}
+
+  div(style='margin-left:20px;margin-top:20px')
+
+    h4 Sectors
+
+    dl
+      each sector in sectors
+        dt
+          a(href=sector.url) #{sector.sector_name}
+        dd #{book.summary}
+
+      else
+        p This area has no sectors.
+  hr
+  p
+    a(href=area.url+'/delete') Delete Area
+  p
+    a(href=author.url+'/update') Update Area

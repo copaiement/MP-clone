@@ -3,7 +3,7 @@ const { DateTime } = require('luxon');
 
 const Schema = mongoose.Schema;
 
-const RouteSchema = new Schema({
+const RoutenameSchema = new Schema({
   route_name: { type: String, required: true, maxLength: 100 },
   route_type: {
     type: String,
@@ -29,14 +29,14 @@ const RouteSchema = new Schema({
 });
 
 // Virtual for area's URL
-RouteSchema.virtual('url').get(function () {
+RoutenameSchema.virtual('url').get(function () {
   // We don't use an arrow function as we'll need the this object
   return `/catalog/route/${this._id}`;
 });
 
-RouteSchema.virtual('added_date_formatted').get(function () {
+RoutenameSchema.virtual('added_date_formatted').get(function () {
   return DateTime.fromJSDate(this.added).toLocaleString(DateTime.DATETIME_MED);
 });
 
 // Export model
-module.exports = mongoose.model('Route', RouteSchema);
+module.exports = mongoose.model('Routename', RoutenameSchema);

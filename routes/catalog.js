@@ -1,10 +1,11 @@
 const express = require('express');
+
 const router = express.Router();
 
 // Require controller modules.
 const area_controller = require('../controllers/areaController');
 const comment_controller = require('../controllers/commentController');
-const route_controller = require('../controllers/routeController');
+const routename_controller = require('../controllers/routenameController');
 const sector_controller = require('../controllers/sectorController');
 
 /// AREA ROUTES ///
@@ -65,28 +66,28 @@ router.get('/comments', comment_controller.comment_list);
 /// ROUTE ROUTES ///
 
 // GET request for creating a route. NOTE This must come before route that displays route (uses id).
-router.get('/route/create', route_controller.route_create_get);
+router.get('/routename/create', routename_controller.routename_create_get);
 
 // POST request for creating route.
-router.post('/route/create', route_controller.route_create_post);
+router.post('/routename/create', routename_controller.routename_create_post);
 
 // GET request to delete route.
-router.get('/route/:id/delete', route_controller.route_delete_get);
+router.get('/routename/:id/delete', routename_controller.routename_delete_get);
 
 // POST request to delete route.
-router.post('/route/:id/delete', route_controller.route_delete_post);
+router.post('/routename/:id/delete', routename_controller.routename_delete_post);
 
 // GET request to update route.
-router.get('/route/:id/update', route_controller.route_update_get);
+router.get('/routename/:id/update', routename_controller.routename_update_get);
 
 // POST request to update route.
-router.post('/route/:id/update', route_controller.route_update_post);
+router.post('/routename/:id/update', routename_controller.routename_update_post);
 
 // GET request for one route.
-router.get('/route/:id', route_controller.route_detail);
+router.get('/routename/:id', routename_controller.routename_detail);
 
 // GET request for list of all route.
-router.get('/routes', route_controller.route_list);
+router.get('/routenames', routename_controller.routename_list);
 
 /// SECTOR ROUTES ///
 
