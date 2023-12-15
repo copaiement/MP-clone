@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  h1 #{title}: #{area.area_name}
+  p State: #{area.state}
+  p Date Added: #{area.added_date_formatted}
+
+  if area_sectors.length
+
+    p #[strong Delete the following sectors before attempting to delete this area.]
+
+    div(style='margin-left:20px;margin-top:20px')
+
+      h4 Sectors
+
+      dl
+      each sector in area_sectors
+        dt
+          a(href=sector.url) #{sector.sector_name}
+        dd Routes: #{sector.count}
+
+  else
+    p Do you really want to delete this Area?
+
+    form(method='POST' action='')
+      div.form-group
+        input#areaid.form-control(type='hidden',name='areaid', required='true', value=area._id )
+
+      button.btn.btn-primary(type='submit') Delete

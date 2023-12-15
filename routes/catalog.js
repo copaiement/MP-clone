@@ -13,23 +13,23 @@ const sector_controller = require('../controllers/sectorController');
 // GET catalog home page.
 router.get('/', area_controller.index);
 
-// // GET request for creating an area. NOTE This must come before routes that display area (uses id).
-// router.get('/area/create', area_controller.area_create_get);
+// GET request for creating an area. NOTE This must come before routes that display area (uses id).
+router.get('/area/create', area_controller.area_create_get);
 
-// // POST request for creating area.
-// router.post('/area/create', area_controller.area_create_post);
+// POST request for creating area.
+router.post('/area/create', area_controller.area_create_post);
 
-// // GET request to delete area.
-// router.get('/area/:id/delete', area_controller.area_delete_get);
+// GET request to delete area.
+router.get('/area/:id/delete', area_controller.area_delete_get);
 
-// // POST request to delete area.
-// router.post('/area/:id/delete', area_controller.area_delete_post);
+// POST request to delete area.
+router.post('/area/:id/delete', area_controller.area_delete_post);
 
 // // GET request to update area.
-// router.get('/area/:id/update', area_controller.area_update_get);
+router.get('/area/:id/update', area_controller.area_update_get);
 
-// // POST request to update area.
-// router.post('/area/:id/update', area_controller.area_update_post);
+// POST request to update area.
+router.post('/area/:id/update', area_controller.area_update_post);
 
 // GET request for one area.
 router.get('/area/:id', area_controller.area_detail);

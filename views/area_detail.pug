@@ -2,18 +2,18 @@ extends layout
 
 block content
 
-  h1 Area: #{area.name}
-  p #{area.state}
+  h1 #{area.area_name}
+  p State: #{area.state}
+  p Date Added: #{area.added_date_formatted}
 
   div(style='margin-left:20px;margin-top:20px')
 
-    h4 Sectors
+    h4 Sectors in #{area.area_name}
 
     dl
       each sector in sectors
         dt
           a(href=sector.url) #{sector.sector_name}
-        dd #{book.summary}
 
       else
         p This area has no sectors.
@@ -21,4 +21,4 @@ block content
   p
     a(href=area.url+'/delete') Delete Area
   p
-    a(href=author.url+'/update') Update Area
+    a(href=area.url+'/update') Update Area

@@ -1,3 +1,4 @@
+const ObjId = require('mongoose').Types.ObjectId;
 const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 const Area = require('../models/area');
@@ -39,7 +40,7 @@ exports.area_detail = asyncHandler(async (req, res, next) => {
   // Get details of author and all their books (in parallel)
   const [area, allSectors] = await Promise.all([
     Area.findById(req.params.id).exec(),
-    Sector.find({ area: req.params.id }, 'sector_name').exec(),
+    Sector.find({ area: req.params.id }, 'sector_name').sort({ sector_name: 1 }).exec(),
   ]);
 
   if (area === null) {
@@ -56,10 +57,14 @@ exports.area_detail = asyncHandler(async (req, res, next) => {
   });
 });
 
-// // Display Author create form on GET.
-// exports.author_create_get = (req, res, next) => {
-//   res.render('author_form', { title: 'Create Author' });
-// };
+// Display Author create form on GET.
+exports.area_create_get = (req, res, next) => {
+  res.render('area_form', { title: 'Create Area' });
+};
+
+exports.area_create_post = (req, res, next) => {
+  res.send('Not implemented: area create POST');
+};
 
 // // Handle Author create on POST.
 // exports.author_create_post = [
@@ -118,25 +123,56 @@ exports.area_detail = asyncHandler(async (req, res, next) => {
 //   }),
 // ];
 
-// // Display Author delete form on GET.
-// exports.author_delete_get = asyncHandler(async (req, res, next) => {
-//   // Get details of author and all their books (in parallel)
-//   const [author, allBooksByAuthor] = await Promise.all([
-//     Author.findById(req.params.id).exec(),
-//     Book.find({ author: req.params.id }, 'title summary').exec(),
-//   ]);
+// Display Author delete form on GET.
+exports.area_delete_get = asyncHandler(async (req, res, next) => {
+  // Get details of author and all their books (in parallel)
+  const [area, allAreaSectors] = await Promise.all([
+    Area.findById(req.params.id).exec(),
+    // Sector.find({ area: req.params.id }, 'sector_name')
+    //   .sort({ sector_name: 1 })
+    //   .exec(),
 
-//   if (author === null) {
-//     // No results.
-//     res.redirect('/catalog/authors');
-//   }
+    // test aggregate method
+    Sector.aggregate([
+      {
+        $match: {
+          area: new ObjId(req.params.id),
+        },
+      },
+      {
+        $lookup: {
+          from: 'routenames',
+          localField: '_id',
+          foreignField: 'sector',
+          as: 'routenames',
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          sector_name: 1,
+          url: 1,
+          count: { $size: '$routenames' },
+        },
+      },
+    ]).exec(),
+  ]);
 
-//   res.render('author_delete', {
-//     title: 'Delete Author',
-//     author: author,
-//     author_books: allBooksByAuthor,
-//   });
-// });
+  if (area === null) {
+    // No results.
+    res.redirect('/catalog/areas');
+  }
+
+  res.render('area_delete', {
+    title: 'Delete Area',
+    area: area,
+    area_sectors: allAreaSectors,
+  });
+});
+
+exports.area_delete_post = (req, res, next) => {
+  res.send('Not implemented: area delete POST');
+};
 
 // // Handle Author delete on POST.
 // exports.author_delete_post = asyncHandler(async (req, res, next) => {
@@ -160,22 +196,27 @@ exports.area_detail = asyncHandler(async (req, res, next) => {
 //   }
 // });
 
-// // Display Author update form on GET
-// exports.author_update_get = asyncHandler(async (req, res, next) => {
-//   const author = await Author.findById(req.params.id).exec();
+// Display Author update form on GET
+exports.area_update_get = asyncHandler(async (req, res, next) => {
+  res.send('Not implemented: area update GET');
+  // const author = await Author.findById(req.params.id).exec();
 
-//   if (author === null) {
-//     // No results
-//     const err = new Error('Author not found');
-//     err.status = 404;
-//     return next(err);
-//   }
+  // if (author === null) {
+  //   // No results
+  //   const err = new Error('Author not found');
+  //   err.status = 404;
+  //   return next(err);
+  // }
 
-//   res.render('author_form', {
-//     title: 'Update Author',
-//     author: author,
-//   });
-// });
+  // res.render('author_form', {
+  //   title: 'Update Author',
+  //   author: author,
+  // });
+});
+
+exports.area_update_post = (req, res, next) => {
+  res.send('Not implemented: area update POST');
+};
 
 // // Handle Author update on POST
 // exports.author_update_post = [

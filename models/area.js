@@ -17,7 +17,7 @@ AreaSchema.virtual('url').get(function () {
 });
 
 AreaSchema.virtual('added_date_formatted').get(function () {
-  return DateTime.fromJSDate(this.added).toLocaleString(DateTime.DATETIME_MED);
+  return DateTime.fromJSDate(this.added_date).toLocaleString(DateTime.DATETIME_MED);
 });
 
 // Export model
