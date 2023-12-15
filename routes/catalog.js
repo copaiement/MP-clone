@@ -25,7 +25,7 @@ router.get('/area/:id/delete', area_controller.area_delete_get);
 // POST request to delete area.
 router.post('/area/:id/delete', area_controller.area_delete_post);
 
-// // GET request to update area.
+// GET request to update area.
 router.get('/area/:id/update', area_controller.area_update_get);
 
 // POST request to update area.
@@ -89,19 +89,19 @@ router.get('/areas', area_controller.area_list);
 // // GET request for list of all route.
 // router.get('/routenames', routename_controller.routename_list);
 
-// /// SECTOR ROUTES ///
+/// SECTOR ROUTES ///
 
-// // GET request for creating a sector. NOTE This must come before route that displays sector (uses id).
-// router.get(
-//   '/sector/create',
-//   sector_controller.sector_create_get,
-// );
+// GET request for creating a sector. NOTE This must come before route that displays sector (uses id).
+router.get(
+  '/sector/create',
+  sector_controller.sector_create_get,
+);
 
-// // POST request for creating sector.
-// router.post(
-//   '/sector/create',
-//   sector_controller.sector_create_post,
-// );
+// POST request for creating sector.
+router.post(
+  '/sector/create',
+  sector_controller.sector_create_post,
+);
 
 // // GET request to delete sector.
 // router.get(
@@ -127,10 +127,10 @@ router.get('/areas', area_controller.area_list);
 //   sector_controller.sector_update_post,
 // );
 
-// // GET request for one sector.
-// router.get('/sector/:id', sector_controller.sector_detail);
+// GET request for one sector.
+router.get('/sector/:id', sector_controller.sector_detail);
 
-// // GET request for list of all sector.
-// router.get('/sectors', sector_controller.sector_list);
+// GET request for list of all sector.
+router.get('/sectors', sector_controller.sector_list);
 
 module.exports = router;

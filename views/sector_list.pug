@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= title
+
+  ul
+    each sector in sector_list
+      li
+        a(href=sector.url) #{sector.sector_name}
+
+    else
+      li There are no Sectors.

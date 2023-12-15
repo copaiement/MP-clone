@@ -62,77 +62,61 @@ exports.area_create_get = (req, res, next) => {
   res.render('area_form', { title: 'Create Area' });
 };
 
-exports.area_create_post = (req, res, next) => {
-  res.send('Not implemented: area create POST');
-};
+exports.area_create_post = [
+  // Validate and sanitize fields.
+  body('area_name')
+    .trim()
+    .isLength({ min: 3 })
+    .escape()
+    .withMessage('Area name must be specified.')
+    .isAlphanumeric('en-US', { ignore: ' ' })
+    .withMessage('Area name has non-alphanumeric characters.'),
+  body('state')
+    .escape(),
+  body('added_by')
+    .trim()
+    .isLength({ min: 3 })
+    .escape()
+    .withMessage('Username must be specified.')
+    .isAlphanumeric()
+    .withMessage('Username has non-alphanumeric characters.'),
 
-// // Handle Author create on POST.
-// exports.author_create_post = [
-//   // Validate and sanitize fields.
-//   body('first_name')
-//     .trim()
-//     .isLength({ min: 1 })
-//     .escape()
-//     .withMessage('First name must be specified.')
-//     .isAlphanumeric()
-//     .withMessage('First name has non-alphanumeric characters.'),
-//   body('family_name')
-//     .trim()
-//     .isLength({ min: 1 })
-//     .escape()
-//     .withMessage('Family name must be specified.')
-//     .isAlphanumeric()
-//     .withMessage('Family name has non-alphanumeric characters.'),
-//   body('date_of_birth', 'Invalid date of birth')
-//     .optional({ values: 'falsy' })
-//     .isISO8601()
-//     .toDate(),
-//   body('date_of_death', 'Invalid date of death')
-//     .optional({ values: 'falsy' })
-//     .isISO8601()
-//     .toDate(),
+  // Process request after validation and sanitization.
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
 
-//   // Process request after validation and sanitization.
-//   asyncHandler(async (req, res, next) => {
-//     // Extract the validation errors from a request.
-//     const errors = validationResult(req);
+    // Create Author object with escaped and trimmed data
+    const area = new Area({
+      area_name: req.body.area_name,
+      state: req.body.state,
+      added_date: new Date(),
+      added_by: req.body.added_by,
+    });
 
-//     // Create Author object with escaped and trimmed data
-//     const author = new Author({
-//       first_name: req.body.first_name,
-//       family_name: req.body.family_name,
-//       date_of_birth: req.body.date_of_birth,
-//       date_of_death: req.body.date_of_death,
-//     });
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/errors messages.
+      res.render('area_form', {
+        title: 'Create Area',
+        area: area,
+        errors: errors.array(),
+      });
+    } else {
+      // Data from form is valid.
 
-//     if (!errors.isEmpty()) {
-//       // There are errors. Render form again with sanitized values/errors messages.
-//       res.render('author_form', {
-//         title: 'Create Author',
-//         author: author,
-//         errors: errors.array(),
-//       });
-//     } else {
-//       // Data from form is valid.
-
-//       // Save author.
-//       await author.save();
-//       // Redirect to new author record.
-//       res.redirect(author.url);
-//     }
-//   }),
-// ];
+      // Save area.
+      await area.save();
+      // Redirect to new area record.
+      res.redirect(area.url);
+    }
+  }),
+];
 
 // Display Author delete form on GET.
 exports.area_delete_get = asyncHandler(async (req, res, next) => {
   // Get details of author and all their books (in parallel)
   const [area, allAreaSectors] = await Promise.all([
     Area.findById(req.params.id).exec(),
-    // Sector.find({ area: req.params.id }, 'sector_name')
-    //   .sort({ sector_name: 1 })
-    //   .exec(),
-
-    // test aggregate method
     Sector.aggregate([
       {
         $match: {
@@ -170,106 +154,112 @@ exports.area_delete_get = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.area_delete_post = (req, res, next) => {
-  res.send('Not implemented: area delete POST');
-};
+// Handle Author delete on POST.
+exports.area_delete_post = asyncHandler(async (req, res, next) => {
+  // Get details of area and area sectors (in parallel)
+  const [area, allAreaSectors] = await Promise.all([
+    Area.findById(req.params.id).exec(),
+    Sector.aggregate([
+      {
+        $match: {
+          area: new ObjId(req.params.id),
+        },
+      },
+      {
+        $lookup: {
+          from: 'routenames',
+          localField: '_id',
+          foreignField: 'sector',
+          as: 'routenames',
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          sector_name: 1,
+          url: 1,
+          count: { $size: '$routenames' },
+        },
+      },
+    ]).exec(),
+  ]);
 
-// // Handle Author delete on POST.
-// exports.author_delete_post = asyncHandler(async (req, res, next) => {
-//   // Get details of author and all their books (in parallel)
-//   const [author, allBooksByAuthor] = await Promise.all([
-//     Author.findById(req.params.id).exec(),
-//     Book.find({ author: req.params.id }, 'title summary').exec(),
-//   ]);
-
-//   if (allBooksByAuthor.length > 0) {
-//     // Author has books. Render in same way as for GET route.
-//     res.render('author_delete', {
-//       title: 'Delete Author',
-//       author: author,
-//       author_books: allBooksByAuthor,
-//     });
-//   } else {
-//     // Author has no books. Delete object and redirect to the list of authors.
-//     await Author.findByIdAndDelete(req.body.authorid);
-//     res.redirect('/catalog/authors');
-//   }
-// });
+  if (allAreaSectors.length > 0) {
+    // Area has Sectors. Render in same way as for GET route.
+    res.render('area_delete', {
+      title: 'Delete Area',
+      area: area,
+      area_sectors: allAreaSectors,
+    });
+  } else {
+    // Area has no Sectors. Delete object and redirect to the list of areas.
+    await Area.findByIdAndDelete(req.body.areaid);
+    res.redirect('/catalog/areas');
+  }
+});
 
 // Display Author update form on GET
 exports.area_update_get = asyncHandler(async (req, res, next) => {
-  res.send('Not implemented: area update GET');
-  // const author = await Author.findById(req.params.id).exec();
+  const area = await Area.findById(req.params.id).exec();
 
-  // if (author === null) {
-  //   // No results
-  //   const err = new Error('Author not found');
-  //   err.status = 404;
-  //   return next(err);
-  // }
+  if (area === null) {
+    // No results
+    const err = new Error('Area not found');
+    err.status = 404;
+    return next(err);
+  }
 
-  // res.render('author_form', {
-  //   title: 'Update Author',
-  //   author: author,
-  // });
+  res.render('area_form', {
+    title: 'Update Area',
+    area: area,
+  });
 });
 
-exports.area_update_post = (req, res, next) => {
-  res.send('Not implemented: area update POST');
-};
+exports.area_update_post = [
+  // Validate and sanitize fields.
+  body('area_name')
+    .trim()
+    .isLength({ min: 3 })
+    .escape()
+    .withMessage('Area name must be specified.')
+    .isAlphanumeric('en-US', { ignore: ' ' })
+    .withMessage('Area name has non-alphanumeric characters.'),
+  body('state')
+    .escape(),
+  body('added_by')
+    .trim()
+    .isLength({ min: 3 })
+    .escape()
+    .withMessage('Username must be specified.')
+    .isAlphanumeric()
+    .withMessage('Username has non-alphanumeric characters.'),
 
-// // Handle Author update on POST
-// exports.author_update_post = [
-//   // Validate and sanitize fields.
-//   body('first_name')
-//     .trim()
-//     .isLength({ min: 1 })
-//     .escape()
-//     .withMessage('First name must be specified.')
-//     .isAlphanumeric()
-//     .withMessage('First name has non-alphanumeric characters.'),
-//   body('family_name')
-//     .trim()
-//     .isLength({ min: 1 })
-//     .escape()
-//     .withMessage('Family name must be specified.')
-//     .isAlphanumeric()
-//     .withMessage('Family name has non-alphanumeric characters.'),
-//   body('date_of_birth', 'Invalid date of birth')
-//     .optional({ values: 'falsy' })
-//     .isISO8601()
-//     .toDate(),
-//   body('date_of_death', 'Invalid date of death')
-//     .optional({ values: 'falsy' })
-//     .isISO8601()
-//     .toDate(),
+  // Process request after validation and sanitization.
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
 
-//   // Process request after validation and sanitization.
-//   asyncHandler(async (req, res, next) => {
-//     // Extract the validation errors from a request.
-//     const errors = validationResult(req);
+    // Create Author object with escaped and trimmed data
+    const area = new Area({
+      area_name: req.body.area_name,
+      state: req.body.state,
+      added_date: new Date(),
+      added_by: req.body.added_by,
+      _id: req.params.id,
+    });
 
-//     // Create Author object with escaped and trimmed data
-//     const author = new Author({
-//       first_name: req.body.first_name,
-//       family_name: req.body.family_name,
-//       date_of_birth: req.body.date_of_birth,
-//       date_of_death: req.body.date_of_death,
-//       _id: req.params.id,
-//     });
-
-//     if (!errors.isEmpty()) {
-//       // There are errors. Render form again with sanitized values/errors messages.
-//       res.render('author_form', {
-//         title: 'Update Author',
-//         author: author,
-//         errors: errors.array(),
-//       });
-//     } else {
-//       // Data from form is valid. Update the record
-//       const updatedAuthor = await Author.findByIdAndUpdate(req.params.id, author, {});
-//       // Redirect to new author record.
-//       res.redirect(updatedAuthor.url);
-//     }
-//   }),
-// ];
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/errors messages.
+      res.render('area_form', {
+        title: 'Update Area',
+        area: area,
+        errors: errors.array(),
+      });
+    } else {
+      // Data from form is valid. Update the record
+      const updatedArea = await Area.findByIdAndUpdate(req.params.id, area, {});
+      // Redirect to new area record.
+      res.redirect(updatedArea.url);
+    }
+  }),
+];

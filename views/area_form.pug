@@ -14,7 +14,7 @@ block content
           option(value=state selected=(undefined===area || area.state!=state ? false : 'selected')) #{state}
     div.form-group
       label(for='added_by') Added By:
-      input#added_by.form-control(type='text' placeholder='Username' name='added_by' value=(undefined===area ? '' : area.added_by) )
+      input#added_by.form-control(type='text' placeholder='Username' name='added_by' required='true' value=(undefined===area ? '' : area.added_by) )
     button.btn.btn-primary(type='submit') Submit
   if errors
     ul

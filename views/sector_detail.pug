@@ -1,0 +1,27 @@
+extends layout
+
+block content
+
+  h1 #{sector.sector_name}
+  p Area: #{sector.area.area_name}
+  p Date Added: #{sector.added_date_formatted}
+  p Added By: #{sector.added_by}
+
+  div(style='margin-left:20px;margin-top:20px')
+
+    h4 Routes in #{sector.sector_name}
+
+    dl
+      each routename in routesInSector
+        dt
+          a(href=routename.url) #{routename.route_name}
+        dd #{routename.route_type}
+        dd #{routename.route_grade}
+
+      else
+        p This sector has no routes.
+  hr
+  p
+    a(href=sector.url+'/delete') Delete Sector
+  p
+    a(href=sector.url+'/update') Update Sector
