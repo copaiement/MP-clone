@@ -9,7 +9,9 @@ block content
       input#area_name.form-control(type='text' placeholder='Area name' name='area_name' required='true' value=(undefined===area ? '' : area.area_name) )
     div.form-group
       label(for='state') State:
-      input#state.form-control(type='text' name='state' value=(undefined===area ? '' : area.state) )
+      select#state.form-control(type='select' placeholder='Select state' name='state' required='true' )
+        each state in ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
+          option(value=state selected=(undefined===area || area.state!=state ? false : 'selected')) #{state}
     div.form-group
       label(for='added_by') Added By:
       input#added_by.form-control(type='text' placeholder='Username' name='added_by' value=(undefined===area ? '' : area.added_by) )
