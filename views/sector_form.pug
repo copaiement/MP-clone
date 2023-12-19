@@ -2,16 +2,18 @@ extends layout
 
 block content
   h1=title
-
   form(method='POST' action='')
     div.form-group
       label(for='sector_name') Sector Name:
-      input#sector_name.form-control(type='text' placeholder='Sector name' name='sector_name' required='true' value=(undefined===sector ? '' : sector.area) )
+      input#sector_name.form-control(type='text' placeholder='Sector name' name='sector_name' required='true' value=(undefined===sector ? '' : sector.sector_name) )
     div.form-group
       label(for='area') Area:
       select#area.form-control(type='select' placeholder='Select Area' name='area' required='true' )
         each area in allAreas 
-          option(value=area._id selected=(undefined===sector || sector.area!=area ? false : 'selected')) #{area.area_name}
+          if sector
+            option(value=area._id selected=(area._id.toString()===sector.area._id.toString() ? 'selected' : false)) #{area.area_name}
+          else
+            option(value=area._id) #{area.area_name}
     div.form-group
       label(for='added_by') Added By:
       input#added_by.form-control(type='text' placeholder='Username' name='added_by' required='true' value=(undefined===sector ? '' : sector.added_by) )

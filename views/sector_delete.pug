@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  h1 #{title}: #{sector.sector_name}
+  p Date Added: #{sector.added_date_formatted}
+
+  if sector_routes.length
+
+    p #[strong Delete the following routes before attempting to delete this sector.]
+
+    div(style='margin-left:20px;margin-top:20px')
+
+      h4 Sectors
+
+      dl
+      each routename in sector_routes
+        dt
+          a(href=routename.url) #{routename.route_name}
+        dd #{routename.route_type}
+        dd #{routename.route_grade}
+
+  else
+    p Do you really want to delete this Sector?
+
+    form(method='POST' action='')
+      div.form-group
+        input#sectorid.form-control(type='hidden',name='sectorid', required='true', value=sector._id )
+
+      button.btn.btn-primary(type='submit') Delete

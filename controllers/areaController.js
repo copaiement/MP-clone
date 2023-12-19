@@ -37,7 +37,7 @@ exports.area_list = asyncHandler(async (req, res, next) => {
 
 // Display detail page for a specific Area.
 exports.area_detail = asyncHandler(async (req, res, next) => {
-  // Get details of author and all their books (in parallel)
+  // Get details of area and all their sectors (in parallel)
   const [area, allSectors] = await Promise.all([
     Area.findById(req.params.id).exec(),
     Sector.find({ area: req.params.id }, 'sector_name').sort({ sector_name: 1 }).exec(),
@@ -57,7 +57,7 @@ exports.area_detail = asyncHandler(async (req, res, next) => {
   });
 });
 
-// Display Author create form on GET.
+// Display area create form on GET.
 exports.area_create_get = (req, res, next) => {
   res.render('area_form', { title: 'Create Area' });
 };
@@ -86,7 +86,7 @@ exports.area_create_post = [
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
-    // Create Author object with escaped and trimmed data
+    // Create area object with escaped and trimmed data
     const area = new Area({
       area_name: req.body.area_name,
       state: req.body.state,
@@ -112,9 +112,9 @@ exports.area_create_post = [
   }),
 ];
 
-// Display Author delete form on GET.
+// Display Area delete form on GET.
 exports.area_delete_get = asyncHandler(async (req, res, next) => {
-  // Get details of author and all their books (in parallel)
+  // Get details of area and area sectors (in parallel)
   const [area, allAreaSectors] = await Promise.all([
     Area.findById(req.params.id).exec(),
     Sector.aggregate([
@@ -154,7 +154,7 @@ exports.area_delete_get = asyncHandler(async (req, res, next) => {
   });
 });
 
-// Handle Author delete on POST.
+// Handle area delete on POST.
 exports.area_delete_post = asyncHandler(async (req, res, next) => {
   // Get details of area and area sectors (in parallel)
   const [area, allAreaSectors] = await Promise.all([
@@ -198,7 +198,7 @@ exports.area_delete_post = asyncHandler(async (req, res, next) => {
   }
 });
 
-// Display Author update form on GET
+// Display area update form on GET
 exports.area_update_get = asyncHandler(async (req, res, next) => {
   const area = await Area.findById(req.params.id).exec();
 
@@ -239,7 +239,7 @@ exports.area_update_post = [
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
-    // Create Author object with escaped and trimmed data
+    // Create area object with escaped and trimmed data
     const area = new Area({
       area_name: req.body.area_name,
       state: req.body.state,

@@ -1,0 +1,29 @@
+extends layout
+
+block content
+
+  h1 #{title}: #{route.route_name}
+  p #{route.route_grade}, #{route.route_type}
+  p Sector: #{route.sector.sector_name}
+  p Area: #{route.area.area_name}, #{route.area.state}
+  p Date Added: #{route.added_date_formatted}
+  p Added By: #{route.added_by}
+
+  div(style='margin-left:20px;margin-top:20px')
+
+    h4 Comments on #{route.route_name}
+
+    dl
+      each comment in allRouteComments
+        dt #{comment.added_by}
+        dd #{comment.comment_text}
+        dd #{comment.added_date_formatted}
+
+      else
+        p This route has no comments.
+    a(href=route.url+'/addcomment') Add a comment
+  hr
+  p
+    a(href=route.url+'/delete') Delete Route
+  p
+    a(href=route.url+'/update') Update Route

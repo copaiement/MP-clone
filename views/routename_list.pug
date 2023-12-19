@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= title
+
+  ul
+    each route in route_list
+      li
+        a(href=route.url) #{route.route_name}, #{route.route_grade}, #{route.area.area_name} (#{route.area.state})
+
+    else
+      li There are no Routes.

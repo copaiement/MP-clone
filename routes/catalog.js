@@ -63,10 +63,10 @@ router.get('/areas', area_controller.area_list);
 // // GET request for list of all comments.
 // router.get('/comments', comment_controller.comment_list);
 
-// /// ROUTE ROUTES ///
+/// ROUTE ROUTES ///
 
-// // GET request for creating a route. NOTE This must come before route that displays route (uses id).
-// router.get('/routename/create', routename_controller.routename_create_get);
+// GET request for creating a route. NOTE This must come before route that displays route (uses id).
+router.get('/routename/create', routename_controller.routename_create_get);
 
 // // POST request for creating route.
 // router.post('/routename/create', routename_controller.routename_create_post);
@@ -83,11 +83,11 @@ router.get('/areas', area_controller.area_list);
 // // POST request to update route.
 // router.post('/routename/:id/update', routename_controller.routename_update_post);
 
-// // GET request for one route.
-// router.get('/routename/:id', routename_controller.routename_detail);
+// GET request for one route.
+router.get('/routename/:id', routename_controller.routename_detail);
 
-// // GET request for list of all route.
-// router.get('/routenames', routename_controller.routename_list);
+// GET request for list of all route.
+router.get('/routenames', routename_controller.routename_list);
 
 /// SECTOR ROUTES ///
 
@@ -103,29 +103,29 @@ router.post(
   sector_controller.sector_create_post,
 );
 
-// // GET request to delete sector.
-// router.get(
-//   '/sector/:id/delete',
-//   sector_controller.sector_delete_get,
-// );
+// GET request to delete sector.
+router.get(
+  '/sector/:id/delete',
+  sector_controller.sector_delete_get,
+);
 
-// // POST request to delete sector.
-// router.post(
-//   '/sector/:id/delete',
-//   sector_controller.sector_delete_post,
-// );
+// POST request to delete sector.
+router.post(
+  '/sector/:id/delete',
+  sector_controller.sector_delete_post,
+);
 
-// // GET request to update sector.
-// router.get(
-//   '/sector/:id/update',
-//   sector_controller.sector_update_get,
-// );
+// GET request to update sector.
+router.get(
+  '/sector/:id/update',
+  sector_controller.sector_update_get,
+);
 
-// // POST request to update sector.
-// router.post(
-//   '/sector/:id/update',
-//   sector_controller.sector_update_post,
-// );
+// POST request to update sector.
+router.post(
+  '/sector/:id/update',
+  sector_controller.sector_update_post,
+);
 
 // GET request for one sector.
 router.get('/sector/:id', sector_controller.sector_detail);
