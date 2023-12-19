@@ -4,15 +4,6 @@ const Area = require('../models/area');
 const Sector = require('../models/sector');
 const Routename = require('../models/routename');
 
-// Display list of all Sectors.
-exports.sector_list = asyncHandler(async (req, res, next) => {
-  const allSectors = await Sector.find().sort({ sector_name: 1 }).exec();
-  res.render('sector_list', {
-    title: 'All Sectors',
-    sector_list: allSectors,
-  });
-});
-
 // Display detail page for a specific sector.
 exports.sector_detail = asyncHandler(async (req, res, next) => {
   // Get details of sector and all the routes (in parallel)
@@ -37,11 +28,11 @@ exports.sector_detail = asyncHandler(async (req, res, next) => {
 
 // Display Sector create form on GET.
 exports.sector_create_get = asyncHandler(async (req, res, next) => {
-  const allAreas = await Area.find().sort({ area_name: 1 }).exec();
+  const area = await Area.findById(req.params.id).exec();
 
   res.render('sector_form', {
     title: 'Create Sector',
-    allAreas: allAreas,
+    area: area,
   });
 });
 
@@ -54,8 +45,6 @@ exports.sector_create_post = [
     .withMessage('Sector name must be specified.')
     .isAlphanumeric('en-US', { ignore: ' ' })
     .withMessage('Sector name has non-alphanumeric characters.'),
-  body('area_name')
-    .escape(),
   body('added_by')
     .trim()
     .isLength({ min: 3 })
@@ -72,15 +61,18 @@ exports.sector_create_post = [
     // Create Sector object with escaped and trimmed data
     const sector = new Sector({
       sector_name: req.body.sector_name,
-      area: req.body.area,
+      area: req.params.id,
       added_date: new Date(),
       added_by: req.body.added_by,
     });
 
     if (!errors.isEmpty()) {
+      // get area again
+      const area = await Area.findById(req.params.id).exec();
       // There are errors. Render form again with sanitized values/errors messages.
       res.render('sector_form', {
         title: 'Create Sector',
+        area: area,
         sector: sector,
         errors: errors.array(),
       });
@@ -132,8 +124,9 @@ exports.sector_delete_post = asyncHandler(async (req, res, next) => {
     });
   } else {
     // Area has no Sectors. Delete object and redirect to the list of areas.
+    const areaId = sector.area;
     await Sector.findByIdAndDelete(req.body.sectorid);
-    res.redirect('/catalog/sectors');
+    res.redirect('catalog/areas');
   }
 });
 

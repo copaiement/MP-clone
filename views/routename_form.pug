@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h1=title
+  form(method='POST' action='')
+    div#area_name Area: #{sector.area.area_name}
+    div#sector_name Sector: #{sector.sector_name}
+    div.form-group
+      label(for='route_name') Route Name:
+      input#route_name.form-control(type='text' placeholder='Route name' name='route_name' required='true' value=(undefined===route ? '' : route.route_name) )
+    div.form-group
+      label(for='route_type') Route Type:
+      select#route_type.form-control(type='select' placeholder='Route type' name='route_type' required='true' )
+        each route_type in ['Traditional', 'Sport']
+          option(value=route_type selected=(undefined===route || route.route_type!=route_type ? false : 'selected')) #{route_type}
+    div.form-group
+      label(for='route_grade') Route Grade:
+      select#route_grade.form-control(type='select' placeholder='Route grade' name='route_grade' required='true' )
+        each route_grade in ['5.4', '5.5', '5.6', '5.7', '5.8', '5.9', '5.10a','5.10b', '5.10c', '5.10d', '5.11a', '5.11b', '5.11c','5.11d', '5.12a', '5.12b', '5.12c', '5.12d', '5.13a','5.13b', '5.13c', '5.13d', '5.14a', '5.14b', '5.14c','5.14d', '5.15a', '5.15b', '5.15c', '5.15d']
+          option(value=route_grade selected=(undefined===route || route.route_grade!=route_grade ? false : 'selected')) #{route_grade}
+    div.form-group
+      label(for='added_by') Added By:
+      input#added_by.form-control(type='text' placeholder='Username' name='added_by' required='true' value=(undefined===route ? '' : route.added_by) )
+    button.btn.btn-primary(type='submit') Submit
+  if errors
+    ul
+      for error in errors
+        li!= error.msg

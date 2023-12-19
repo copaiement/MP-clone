@@ -66,10 +66,10 @@ router.get('/areas', area_controller.area_list);
 /// ROUTE ROUTES ///
 
 // GET request for creating a route. NOTE This must come before route that displays route (uses id).
-router.get('/routename/create', routename_controller.routename_create_get);
+router.get('/sector/:id/createroute', routename_controller.routename_create_get);
 
-// // POST request for creating route.
-// router.post('/routename/create', routename_controller.routename_create_post);
+// POST request for creating route.
+router.post('/sector/:id/createroute', routename_controller.routename_create_post);
 
 // // GET request to delete route.
 // router.get('/routename/:id/delete', routename_controller.routename_delete_get);
@@ -92,14 +92,15 @@ router.get('/routenames', routename_controller.routename_list);
 /// SECTOR ROUTES ///
 
 // GET request for creating a sector. NOTE This must come before route that displays sector (uses id).
+// only link comes from Area
 router.get(
-  '/sector/create',
+  '/area/:id/createsector',
   sector_controller.sector_create_get,
 );
 
 // POST request for creating sector.
 router.post(
-  '/sector/create',
+  '/area/:id/createsector',
   sector_controller.sector_create_post,
 );
 
@@ -129,8 +130,5 @@ router.post(
 
 // GET request for one sector.
 router.get('/sector/:id', sector_controller.sector_detail);
-
-// GET request for list of all sector.
-router.get('/sectors', sector_controller.sector_list);
 
 module.exports = router;
