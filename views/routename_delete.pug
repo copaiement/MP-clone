@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1 #{title}: #{route.route_name}
+  p #{route.route_grade}, #{route.route_type}
+  p Sector: #{route.sector.sector_name}
+  p Area: #{route.area.area_name}, #{route.area.state}
+  p Date Added: #{route.added_date_formatted}
+  p Added By: #{route.added_by}
+
+  p Do you really want to delete this Route?
+
+  form(method='POST' action='')
+    div.form-group
+      input#routeid.form-control(type='hidden',name='routeid', required='true', value=route._id )
+
+    button.btn.btn-primary(type='submit') Delete

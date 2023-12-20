@@ -51,17 +51,9 @@ router.get('/areas', area_controller.area_list);
 // // POST request to delete comment.
 // router.post('/comment/:id/delete', comment_controller.comment_delete_post);
 
-// // GET request to update comment.
-// router.get('/comment/:id/update', comment_controller.comment_update_get);
-
-// // POST request to update comment.
-// router.post('/comment/:id/update', comment_controller.comment_update_post);
-
 // // GET request for one comment.
 // router.get('/comment/:id', comment_controller.comment_detail);
 
-// // GET request for list of all comments.
-// router.get('/comments', comment_controller.comment_list);
 
 /// ROUTE ROUTES ///
 
@@ -71,17 +63,17 @@ router.get('/sector/:id/createroute', routename_controller.routename_create_get)
 // POST request for creating route.
 router.post('/sector/:id/createroute', routename_controller.routename_create_post);
 
-// // GET request to delete route.
-// router.get('/routename/:id/delete', routename_controller.routename_delete_get);
+// GET request to delete route.
+router.get('/routename/:id/delete', routename_controller.routename_delete_get);
 
-// // POST request to delete route.
-// router.post('/routename/:id/delete', routename_controller.routename_delete_post);
+// POST request to delete route.
+router.post('/routename/:id/delete', routename_controller.routename_delete_post);
 
-// // GET request to update route.
-// router.get('/routename/:id/update', routename_controller.routename_update_get);
+// GET request to update route.
+router.get('/routename/:id/update', routename_controller.routename_update_get);
 
-// // POST request to update route.
-// router.post('/routename/:id/update', routename_controller.routename_update_post);
+// POST request to update route.
+router.post('/routename/:id/update', routename_controller.routename_update_post);
 
 // GET request for one route.
 router.get('/routename/:id', routename_controller.routename_detail);

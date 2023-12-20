@@ -3,7 +3,8 @@ extends layout
 block content
 
   h1 #{sector.sector_name}
-  p Area: #{sector.area.area_name}
+  p Area: 
+    a(href=sector.area.url) #{sector.area.area_name}
   p Date Added: #{sector.added_date_formatted}
   p Added By: #{sector.added_by}
 

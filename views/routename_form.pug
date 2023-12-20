@@ -3,8 +3,12 @@ extends layout
 block content
   h1=title
   form(method='POST' action='')
-    div#area_name Area: #{sector.area.area_name}
-    div#sector_name Sector: #{sector.sector_name}
+    if sector
+      div#area_name Area: #{sector.area.area_name}
+      div#sector_name Sector: #{sector.sector_name}
+    else
+      div#area_name Area: #{route.area.area_name}
+      div#sector_name Sector: #{route.sector.sector_name}
     div.form-group
       label(for='route_name') Route Name:
       input#route_name.form-control(type='text' placeholder='Route name' name='route_name' required='true' value=(undefined===route ? '' : route.route_name) )

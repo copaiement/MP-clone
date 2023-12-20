@@ -4,8 +4,10 @@ block content
 
   h1 #{title}: #{route.route_name}
   p #{route.route_grade}, #{route.route_type}
-  p Sector: #{route.sector.sector_name}
-  p Area: #{route.area.area_name}, #{route.area.state}
+  p Sector: 
+    a(href=route.sector.url) #{route.sector.sector_name}
+  p Area: 
+    a(href=route.area.url) #{route.area.area_name}, #{route.area.state}
   p Date Added: #{route.added_date_formatted}
   p Added By: #{route.added_by}
 
