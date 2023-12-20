@@ -1,11 +1,11 @@
 extends routename_detail
 
 block comment
-  h1 #{title}
+  h1 Add comment
 
   form(method='POST' action='')
     div.form-group
-      label(for='area_name') Comment:
+      label(for='comment_text') Comment:
       input#comment_text.form-control(type='text' placeholder='Add a comment' name='comment_text' required='true' value=(undefined===comment ? '' : comment.comment_text) )
     div.form-group
       label(for='added_by') Added By:

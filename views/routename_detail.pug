@@ -2,7 +2,7 @@ extends layout
 
 block content
 
-  h1 #{title}: #{route.route_name}
+  h1 Route Detail: #{route.route_name}
   p #{route.route_grade}, #{route.route_type}
   p Sector: 
     a(href=route.sector.url) #{route.sector.sector_name}
