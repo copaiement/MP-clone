@@ -7,12 +7,26 @@ const mongoose = require('mongoose');
 
 const indexRouter = require('./routes/index');
 const catalogRouter = require('./routes/catalog');
+const compression = require('compression');
+const helmet = require('helmet');
 
 const app = express();
 
+// Set up rate limiter: maximum of twenty requests per minute
+const RateLimit = require('express-rate-limit');
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 20,
+});
+// Apply rate limiter to all requests
+app.use(limiter);
+
+// Add helmet to the middleware chain.
+app.use(helmet());
+
 // Set up mongoose connection
 mongoose.set('strictQuery', false);
-const mongoDB = 'mongodb+srv://CloneAdmin:LbV9wwZJnuCgyh7r@mpclone.h9xb1yi.mongodb.net/route_database?retryWrites=true&w=majority';
+const mongoDB = process.env.MONGODB_URI;
 
 main().catch((err) => console.log(err));
 async function main() {
@@ -22,6 +36,9 @@ async function main() {
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+// use compression
+app.use(compression());
 
 app.use(logger('dev'));
 app.use(express.json());
