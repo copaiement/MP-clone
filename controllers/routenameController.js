@@ -1,6 +1,5 @@
 const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
-const Area = require('../models/area');
 const Sector = require('../models/sector');
 const Routename = require('../models/routename');
 const Comment = require('../models/comment');

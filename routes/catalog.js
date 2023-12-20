@@ -39,8 +39,8 @@ router.get('/areas', area_controller.area_list);
 
 // /// COMMENT ROUTES ///
 
-// // GET request for creating comment. NOTE This must come before route for id (i.e. display comment).
-// router.get('/comment/create', comment_controller.comment_create_get);
+// GET request for creating comment. NOTE This must come before route for id (i.e. display comment).
+router.get('/routename/:id/addcomment', comment_controller.comment_create_get);
 
 // // POST request for creating comment.
 // router.post('/comment/create', comment_controller.comment_create_post);
@@ -50,10 +50,6 @@ router.get('/areas', area_controller.area_list);
 
 // // POST request to delete comment.
 // router.post('/comment/:id/delete', comment_controller.comment_delete_post);
-
-// // GET request for one comment.
-// router.get('/comment/:id', comment_controller.comment_detail);
-
 
 /// ROUTE ROUTES ///
 
